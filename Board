@@ -1,0 +1,94 @@
+import sys
+from sprites import *
+from settings import *
+from os import path
+from tilemap import *
+pygame.display.init()
+
+
+
+class Game:
+    def __init__(self):
+        pg.init()
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption(TITLE)
+        self.clock = pg.time.Clock()
+        pg.key.set_repeat(500, 100)
+        self.load_data()
+
+
+
+
+    def draw_surface(self):
+        #self.surface = pg.Surface((WIDTH,HEIGHT), pg.SRCALPHA)
+        self.screen.blit(surface,(0, 0))
+
+
+    def draw_text(self, text, font_name, size, color, x, y, align="nw"):
+        font = pygame.font.Font('Font/font.ttf', 12)
+        text_surface = font.render(text, True, YELLOW)
+        text_rect = text_surface.get_rect()
+        if align == "nw":
+            text_rect.topleft = (x, y)
+        if align == "ne":
+            text_rect.topright = (x, y)
+        if align == "sw":
+            text_rect.bottomleft = (x, y)
+        if align == "se":
+            text_rect.bottomright = (x, y)
+        if align == "n":
+            text_rect.midtop = (x, y)
+        if align == "s":
+            text_rect.midbottom = (x, y)
+        if align == "e":
+            text_rect.midright = (x, y)
+        if align == "w":
+            text_rect.midleft = (x, y)
+        if align == "center":
+            text_rect.center = (x, y)
+        self.screen.blit(text_surface, text_rect)
+
+    def draw_map(self):
+        map_surface = pg.image.load('Images/Map.png').convert()
+        self.screen.blit(map_surface, (0, 0))
+
+    def load_data(self):
+        game_folder = path.dirname(__file__)
+        img_folder = path.join(game_folder, 'Images' )
+        self.map = Map(path.join(game_folder, 'map.txt'))
+        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        self.dice_images = []
+        self.dice_rolling_images = []
+        for num in range(1, 7):
+            dice_image = pg.image.load('Images/dice' + str(num) + '.png')
+            self.dice_images.append(dice_image)
+        for num in range(1, 9):
+            dice_rolling_image = pg.image.load('Images/roll' + str(num) + '.png')
+            self.dice_rolling_images.append(dice_rolling_image)
+
+
+    def new(self):
+        # initialize all variables and do all the setup for a new game
+        self.all_sprites = pg.sprite.Group()
+        #self.spaces = pg.sprite.Group()
+        self.yellowspaces = pg.sprite.Group()
+        self.redspaces = pg.sprite.Group()
+        self.luckyspaces = pg.sprite.Group()
+        self.bossspaces = pg.sprite.Group()
+        self.bluespaces = pg.sprite.Group()
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == 'b':
+                    bluespace(self, col, row)
+                if tile == 'y':
+                    yellowspace(self, col, row)
+                if tile == 'r':
+                    redspace(self, col, row)
+                if tile == 'c':
+                    luckyspace(self, col, row)
+                if tile == 'd':
+                    bossspace(self, col, row)
+                if tile == 's':
+                    self.player = Player(self, col, row)
+
+
