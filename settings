@@ -33,13 +33,14 @@ GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
 #Player Settings
-PLAYER_SPEED = 180
+PLAYER_SPEED = 250
 PLAYER_IMG = 'Skele.png'
 PLAYER_HIT_RECT = pg.Rect(0,0,28,42)
 
 #Score
 PLAYER_COINS = 0
 COIN_FONT = pg.font.Font('Font/font.ttf', 25)
+TITLE_FONT = pg.font.Font('Font/font.ttf',100)
 COIN_TEXT = COIN_FONT.render(f"COINS:", False, RED)
 COIN = 1
 
