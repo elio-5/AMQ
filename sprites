@@ -40,6 +40,7 @@ class Player(pg.sprite.Sprite):
         self.arrowleft = False
         self.next = False
         self.rollcount = 0
+        self.yum = True
         self.sqone = False
         self.sq2 = False
         self.sq3 = False
@@ -118,11 +119,16 @@ class Player(pg.sprite.Sprite):
         else:
             if self.is_rolling:
                 self.rolling_images_counter += 1
+
                 if self.rolling_images_counter >= 8:
                     self.is_rolling = False
                     self.rolling_images_counter = 0
                     self.dice = False
                     self.coll = False
+                   #self.yum = False
+
+
+
 
 
     def get_keys(self):
@@ -5407,35 +5413,50 @@ class Player(pg.sprite.Sprite):
         self.get_keys()
         self.rect = self.image.get_rect()
         self.player_movement()
-        hits = pg.sprite.spritecollide(self, self.game.bluespaces, False, collide_hit_rect)
-        if hits and self.coin == 1 and self.go:
+        hits1 = pg.sprite.spritecollide(self, self.game.bluespaces, False, collide_hit_rect)
+        if hits1 and self.coin == 1 and self.go:
+            self.yum = True
             self.coins += 3
             self.coin += 2
-        elif not hits:
+            self.rollcount += 1
+        elif not hits1:
             self.coin = 1
-        hits = pg.sprite.spritecollide(self, self.game.redspaces, False, collide_hit_rect)
-        if hits and self.coin1 == 1 and self.go:
+            #self.yum = False
+        hits2 = pg.sprite.spritecollide(self, self.game.redspaces, False, collide_hit_rect)
+        if hits2 and self.coin1 == 1 and self.go:
+            self.yum = True
             self.coins -= 3
             self.coin1 += 2
-        elif not hits:
+            self.rollcount += 1
+        elif not hits2:
+            #self.yum = False
             self.coin1 = 1
-        hits = pg.sprite.spritecollide(self, self.game.bossspaces, False, collide_hit_rect)
-        if hits and self.coin2 == 1 and self.go:
+        hits3 = pg.sprite.spritecollide(self, self.game.bossspaces, False, collide_hit_rect)
+        if hits3 and self.coin2 == 1 and self.go:
+            self.yum = True
             self.coins -= 5
             self.coin2 += 2
-        elif not hits:
+            self.rollcount += 1
+        elif not hits3:
+            #self.yum = False
             self.coin2 = 1
-        hits = pg.sprite.spritecollide(self, self.game.luckyspaces, False, collide_hit_rect)
-        if hits and self.coin3 == 1 and self.go:
+        hits4 = pg.sprite.spritecollide(self, self.game.luckyspaces, False, collide_hit_rect)
+        if hits4 and self.coin3 == 1 and self.go:
+            self.yum = True
             self.coins += 5
             self.coin3 += 2
-        elif not hits:
+            self.rollcount += 1
+        elif not hits4:
+            #self.yum = False
             self.coin3 = 1
-        hits = pg.sprite.spritecollide(self, self.game.yellowspaces, False, collide_hit_rect)
-        if hits and self.coin4 == 1 and self.go:
+        hits5 = pg.sprite.spritecollide(self, self.game.yellowspaces, False, collide_hit_rect)
+        if hits5 and self.coin4 == 1 and self.go:
+            self.yum = True
             self.coins += random.randint(4,9)
             self.coin4 += 2
-        elif not hits :
+            self.rollcount += 1
+        elif not hits5 :
+            #self.yum = False
             self.coin4 = 1
 
         if self.rand_num != -1 and self.co != (0,0):
@@ -5522,7 +5543,6 @@ class luckyspace(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
 class bossspace(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.bossspaces
